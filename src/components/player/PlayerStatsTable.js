@@ -62,22 +62,6 @@ export default class PlayerStatsTable extends Component {
 
 
   _generateColumns() {
-    // week
-    // gameDate
-    // team
-    // teamImageUrl
-    // opponent
-    // opponentImageUrl
-    // passAttempts
-    // passCompletions
-    // passYards
-    // passTds
-    // rushAttempts
-    // rushYards
-    // rushTds
-    // interceptions
-    // sacks
-
     return [
       this._generateTextColumn('week', 'Week'),
       this._generateTextColumn('gameDate', 'Game Date'),
@@ -85,7 +69,8 @@ export default class PlayerStatsTable extends Component {
       this._generateAvatarColumn('opponent', 'Opponent'),
       this._generateTextColumn('passAttempts', 'Pass Attempts'),
       this._generateTextColumn('passCompletions', 'Pass Completions'),
-      this._generateTextColumn('passYards', 'Pass Tds'),
+      this._generateTextColumn('passYards', 'Pass Yards'),
+      this._generateTextColumn('passTds', 'Pass Tds'),
       this._generateTextColumn('rushAttempts', 'Rush Attempts'),
       this._generateTextColumn('rushYards', 'Rush Yards'),
       this._generateTextColumn('rushTds', 'Rush Tds'),
