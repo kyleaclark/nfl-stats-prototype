@@ -19,7 +19,7 @@ export default class PlayerSelection extends Component {
     });
 
     return (
-      <Menu onClick={(ev) => this.props.onPlayerSelection(ev.key)} mode='horizontal' theme='light'>
+      <Menu onClick={(ev) => this.props.onPlayerSelection(ev.key)} theme='light'>
         {menuItems}
       </Menu>
     );

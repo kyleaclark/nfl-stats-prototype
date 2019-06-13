@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { Avatar, Layout } from 'antd';
 
 import * as CreatePlayers from '../actions/createPlayers';
 import PlayerSelection from '../components/player/PlayerSelection';
@@ -9,9 +10,10 @@ import PlayerStatsTable from '../components/player/PlayerStatsTable';
 
 import './App.css';
 
-const divStyle = {
-  float: 'left',
-  width: '40%'
+const { Header, Content, Footer } = Layout;
+
+const playerInfoBlock = {
+  display: 'inline-block'
 };
 
 function mapStateToProps(state) {
@@ -36,6 +38,22 @@ class App extends Component {
     this.setState({ selectedPlayerId: playerId });
   }
 
+  _renderSelectedPlayerInfo(player) {
+    return (
+      <div>
+        <div style={playerInfoBlock}>
+          <Avatar src={player.playerImageUrl} size={128} shape='square' />
+        </div>
+
+        <div style={playerInfoBlock}>
+          <h3>
+            {player.fullName}<br />{player.playerSeason.seasonYear} Game Logs
+          </h3>
+        </div>
+      </div>
+    )
+  }
+
   render() {
     let selectedPlayer = null;
 
@@ -46,19 +64,25 @@ class App extends Component {
 
 
     return (
-      <div className="App">
-        <header className="App-header">
-          NFL Stats Prototype
-        </header>
+      <Layout className="layout">
+        <Header>
+          <h2>NFL Stats Prototype</h2>
+        </Header>
 
-        <div>
+        <Content style={{ background: '#fff', border: '0', minHeight: '400px', padding: '20px' }}>
+
           {this.props.players
             && <PlayerSelection players={this.props.players} onPlayerSelection={this._onPlayerSelection} />}
 
-          {selectedPlayer &&
-            <PlayerStatsTable player={selectedPlayer} />}
-        </div>
-      </div>
+          {selectedPlayer && this._renderSelectedPlayerInfo(selectedPlayer)}
+
+          <PlayerStatsTable player={selectedPlayer} />
+
+        </Content>
+
+        <Footer style={{ textAlign: 'center' }}>NFL Stats Prototype - Created by Kyle Clark</Footer>
+
+      </Layout>
     );
   }
 

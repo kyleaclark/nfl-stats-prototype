@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Avatar, Table } from 'antd';
+import { Avatar, Table, Tooltip } from 'antd';
 
 const containerStyle = {
   paddingLeft: '20%'
@@ -33,62 +33,86 @@ export default class PlayerStatsTable extends Component {
     });
   }
 
-  _renderAvatarColumnHtml(data) {
-    return (
-      <Avatar src={data.imageUrl} alt={data.label} />
-    )
-  }
-
-  _generateAvatarColumn(key, title) {
+  _generateAvatarColumn(key, name, title) {
     return {
-      title: title,
+      title: this._renderColumnName(name, title),
       dataIndex: key,
       key: key,
-      sorter: (a, b) => sortData(a[key], b[key]),
+      sorter: (a, b) => sortData(a[key].label, b[key].label),
       sortDirections: ['descend', 'ascend'],
       render: (data) => <Avatar src={data.imageUrl} alt={data.label} />
     }
   }
 
-  _generateTextColumn(key, title) {
-    return {
-      title: title,
+  _generateTextColumn(key, name, title, renderFn) {
+    const column = {
+      title: this._renderColumnName(name, title),
       dataIndex: key,
       key: key,
       sorter: (a, b) => sortData(a[key], b[key]),
       sortDirections: ['descend', 'ascend'],
     }
-  }
 
+    if (renderFn) {
+      column.render = (data) => renderFn(data)
+    }
+
+    return column;
+  }
 
   _generateColumns() {
     return [
-      this._generateTextColumn('week', 'Week'),
-      this._generateTextColumn('gameDate', 'Game Date'),
-      this._generateAvatarColumn('team', 'Team'),
-      this._generateAvatarColumn('opponent', 'Opponent'),
-      this._generateTextColumn('passAttempts', 'Pass Attempts'),
-      this._generateTextColumn('passCompletions', 'Pass Completions'),
-      this._generateTextColumn('passYards', 'Pass Yards'),
-      this._generateTextColumn('passTds', 'Pass Tds'),
-      this._generateTextColumn('rushAttempts', 'Rush Attempts'),
-      this._generateTextColumn('rushYards', 'Rush Yards'),
-      this._generateTextColumn('rushTds', 'Rush Tds'),
-      this._generateTextColumn('interceptions', 'interceptions'),
-      this._generateTextColumn('sacks', 'Sacks')
+      this._generateTextColumn('week', 'Week', 'Week Number'),
+      this._generateTextColumn('gameDate', 'Date', 'Game Date', this._renderDateColumn),
+      this._generateAvatarColumn('team', 'Tm', 'Team'),
+      this._generateAvatarColumn('opponent', 'Opp', 'Opponent'),
+      this._generateTextColumn('passAttempts', 'Att', 'Passing Attempts'),
+      this._generateTextColumn('passCompletions', 'Cmp', 'Completed Passes'),
+      this._generateTextColumn('passCompletionRate', 'Cmp%', 'Completion Percentage'),
+      this._generateTextColumn('passYards', 'Yds', 'Passing Yards'),
+      this._generateTextColumn('passTds', 'TD', 'Passing Tds'),
+      this._generateTextColumn('interceptions', 'Int', 'Interceptions Thrown'),
+      this._generateTextColumn('sacks', 'Sk', 'Times Sacked'),
+      this._generateTextColumn('passYardsRate', 'Y/A', 'Passing Yards Per Attempt'),
+      this._generateTextColumn('rushAttempts', 'Att', 'Rushing Attempts'),
+      this._generateTextColumn('rushYards', 'Yds', 'Rushing Yards'),
+      this._generateTextColumn('rushTds', 'TD', 'Rushing Tds'),
+
+
     ]
   }
 
+  _renderColumnName(name, title) {
+    return (
+      <Tooltip title={title}>
+        <span>{name}</span>
+      </Tooltip>
+    )
+  }
+
+  _renderDateColumn(data) {
+    const dateObj = new Date(data);
+    return dateObj.toDateString();
+  }
+
   render() {
-    const dataSource = this._generatePlayerData();
     const columns = this._generateColumns();
+    let dataSource = null;
+
+    if (this.props.player) {
+      this._generatePlayerData();
+    }
 
     console.log('dataSource : ', dataSource);
     console.log('columns : ', columns);
 
     return (
       <div>
-        <Table dataSource={dataSource} columns={columns} />
+        <Table
+          dataSource={dataSource}
+          columns={columns}
+          pagination={false}
+          size={'small'} />
       </div>
     )
   }
