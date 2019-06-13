@@ -5,8 +5,8 @@ import { withRouter } from 'react-router-dom';
 import { Avatar, Layout } from 'antd';
 
 import * as CreatePlayers from '../actions/createPlayers';
-import PlayerSelection from '../components/player/PlayerSelection';
-import PlayerStatsTable from '../components/player/PlayerStatsTable';
+import GameLogTable from '../components/GameLog/GameLogTable';
+import PlayerSelection from '../components/Player/PlayerSelection';
 
 import './App.css';
 
@@ -76,7 +76,7 @@ class App extends Component {
 
           {selectedPlayer && this._renderSelectedPlayerInfo(selectedPlayer)}
 
-          <PlayerStatsTable player={selectedPlayer} />
+          <GameLogTable player={selectedPlayer} />
 
         </Content>
 

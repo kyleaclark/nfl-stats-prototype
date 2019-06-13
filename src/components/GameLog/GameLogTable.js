@@ -9,7 +9,7 @@ function sortData(a, b) {
   return a < b ? -1 : a > b ? 1 : 0;
 }
 
-export default class PlayerStatsTable extends Component {
+export default class GameLogTable extends Component {
 
   _generatePlayerData() {
     const player = this.props.player;
