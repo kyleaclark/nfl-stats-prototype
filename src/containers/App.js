@@ -2,19 +2,16 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Avatar, Layout } from 'antd';
+import { Layout } from 'antd';
 
 import * as CreatePlayers from '../actions/createPlayers';
 import GameLogTable from '../components/GameLog/GameLogTable';
+import PlayerCard from '../components/Player/PlayerCard';
 import PlayerSelection from '../components/Player/PlayerSelection';
 
 import './App.css';
 
 const { Header, Content, Footer } = Layout;
-
-const playerInfoBlock = {
-  display: 'inline-block'
-};
 
 function mapStateToProps(state) {
   return {
@@ -38,22 +35,6 @@ class App extends Component {
     this.setState({ selectedPlayerId: playerId });
   }
 
-  _renderSelectedPlayerInfo(player) {
-    return (
-      <div>
-        <div style={playerInfoBlock}>
-          <Avatar src={player.playerImageUrl} size={128} shape='square' />
-        </div>
-
-        <div style={playerInfoBlock}>
-          <h3>
-            {player.fullName}<br />{player.playerSeason.seasonYear} Game Logs
-          </h3>
-        </div>
-      </div>
-    )
-  }
-
   render() {
     let selectedPlayer = null;
 
@@ -74,7 +55,7 @@ class App extends Component {
           {this.props.players
             && <PlayerSelection players={this.props.players} onPlayerSelection={this._onPlayerSelection} />}
 
-          {selectedPlayer && this._renderSelectedPlayerInfo(selectedPlayer)}
+          {selectedPlayer && <PlayerCard player={selectedPlayer} />}
 
           <GameLogTable player={selectedPlayer} />
 
