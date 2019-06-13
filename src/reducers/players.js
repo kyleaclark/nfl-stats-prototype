@@ -6,7 +6,7 @@ import {Players} from '../constants/players';
 import reducerHandler from '../utils/reducerHandler';
 
 const initialRecord = Record({
-  players: {}
+  players: null
 });
 const initialState = new initialRecord();
 
