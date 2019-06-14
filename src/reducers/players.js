@@ -17,7 +17,7 @@ function createPlayers(state, action) {
   console.log('Players');
 
   Players.forEach((playerInfo, index) => {
-    const player = new Player(playerInfo.id, playerInfo.games);
+    const player = new Player(playerInfo.id, playerInfo.gameLogs);
     nextPlayers[[playerInfo.id]] = player
   });
 

@@ -1,4 +1,4 @@
-import PlayerGame from './PlayerGame';
+import GameLog from './GameLog';
 
 export default class PlayerSeason {
 
@@ -8,7 +8,7 @@ export default class PlayerSeason {
   }
 
   intoSeasonProps() {
-    this.games = [];
+    this.gameLogs = [];
     this.gamesPlayed = 0;
     this.weekIndexKeyMap = {};
     this.weeks = [];
@@ -30,29 +30,29 @@ export default class PlayerSeason {
     this.passCompletionRates = [];
   }
 
-  computeGameInfo(gameInfo) {
-    const playerGame = new PlayerGame(gameInfo);
-    this.games.push(playerGame);
+  computeGameInfo(gameLogInfo) {
+    const gameLog = new GameLog(gameLogInfo);
+    this.gameLogs.push(gameLog);
 
     // process game details and counting stats
     this.gamesPlayed += 1;
-    this.weeks.push(playerGame.week);
-    this.gameDates.push(playerGame.gameDate);
-    this.teams.push(playerGame.team)
-    this.teamImageUrls.push(playerGame.teamImageUrl);
-    this.opponents.push(playerGame.opponent);
-    this.opponentImageUrls.push(playerGame.opponentImageUrl);
-    this.passAttempts.push(playerGame.passAttempts);
-    this.passCompletions.push(playerGame.passCompletions);
-    this.passYards.push(playerGame.passYards);
-    this.passTds.push(playerGame.passTds);
-    this.rushAttempts.push(playerGame.rushAttempts);
-    this.rushYards.push(playerGame.rushYards);
-    this.rushTds.push(playerGame.rushTds);
-    this.interceptions.push(playerGame.interceptions);
-    this.sacks.push(playerGame.sacks);
-    this.passYardsRates.push(playerGame.passYardRate);
-    this.passCompletionRates.push(playerGame.passCompletionRate);
+    this.weeks.push(gameLog.week);
+    this.gameDates.push(gameLog.gameDate);
+    this.teams.push(gameLog.team)
+    this.teamImageUrls.push(gameLog.teamImageUrl);
+    this.opponents.push(gameLog.opponent);
+    this.opponentImageUrls.push(gameLog.opponentImageUrl);
+    this.passAttempts.push(gameLog.passAttempts);
+    this.passCompletions.push(gameLog.passCompletions);
+    this.passYards.push(gameLog.passYards);
+    this.passTds.push(gameLog.passTds);
+    this.rushAttempts.push(gameLog.rushAttempts);
+    this.rushYards.push(gameLog.rushYards);
+    this.rushTds.push(gameLog.rushTds);
+    this.interceptions.push(gameLog.interceptions);
+    this.sacks.push(gameLog.sacks);
+    this.passYardsRates.push(gameLog.passYardRate);
+    this.passCompletionRates.push(gameLog.passCompletionRate);
   }
 
 }

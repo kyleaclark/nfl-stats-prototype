@@ -1,35 +1,29 @@
 import React, { Component } from 'react';
 import { Avatar, Table, Tooltip } from 'antd';
 
-const containerStyle = {
-  paddingLeft: '20%'
-}
-
 function sortData(a, b) {
   return a < b ? -1 : a > b ? 1 : 0;
 }
 
 export default class GameLogTable extends Component {
 
-  _generatePlayerData() {
-    const player = this.props.player;
-
-    return player.playerSeason.games.map((game, index) => {
-      let gameObj = Object.assign({}, game);
-      let gameData = {
+  _generateGameLogTableData(gameLogs) {
+    return gameLogs.map((gameLog, index) => {
+      let gameLogCopy = Object.assign({}, gameLog);
+      let gameDataSource = {
         'key': index,
-        'team': {'label': gameObj.team, 'imageUrl': gameObj.teamImageUrl},
-        'opponent': {'label': gameObj.opponent, 'imageUrl': gameObj.opponentImageUrl}
+        'team': {'label': gameLogCopy.team, 'imageUrl': gameLogCopy.teamImageUrl},
+        'opponent': {'label': gameLogCopy.opponent, 'imageUrl': gameLogCopy.opponentImageUrl}
       };
 
-      delete gameObj.team;
-      delete gameObj.teamImageUrl;
-      delete gameObj.opponent;
-      delete gameObj.opponentImageUrl;
+      delete gameLogCopy.team;
+      delete gameLogCopy.teamImageUrl;
+      delete gameLogCopy.opponent;
+      delete gameLogCopy.opponentImageUrl;
 
-      Object.keys(gameObj).forEach(key => gameData[key] = gameObj[key]);
+      Object.keys(gameLogCopy).forEach(key => gameDataSource[key] = gameLogCopy[key]);
 
-      return gameData
+      return gameDataSource;
     });
   }
 
@@ -63,22 +57,20 @@ export default class GameLogTable extends Component {
   _generateColumns() {
     return [
       this._generateTextColumn('week', 'Week', 'Week Number'),
-      this._generateTextColumn('gameDate', 'Date', 'Game Date', this._renderDateColumn),
+      this._generateTextColumn('gameDate', 'Date', 'Game Date', this._renderDateValue),
       this._generateAvatarColumn('team', 'Tm', 'Team'),
       this._generateAvatarColumn('opponent', 'Opp', 'Opponent'),
       this._generateTextColumn('passAttempts', 'Att', 'Passing Attempts'),
       this._generateTextColumn('passCompletions', 'Cmp', 'Completed Passes'),
-      this._generateTextColumn('passCompletionRate', 'Cmp%', 'Completion Percentage'),
+      this._generateTextColumn('passCompletionRate', 'Cmp%', 'Completion Percentage', this._renderPercentageValue),
       this._generateTextColumn('passYards', 'Yds', 'Passing Yards'),
       this._generateTextColumn('passTds', 'TD', 'Passing Tds'),
       this._generateTextColumn('interceptions', 'Int', 'Interceptions Thrown'),
       this._generateTextColumn('sacks', 'Sk', 'Times Sacked'),
-      this._generateTextColumn('passYardsRate', 'Y/A', 'Passing Yards Per Attempt'),
+      this._generateTextColumn('passYardsRate', 'Y/A', 'Passing Yards Per Attempt', this._renderDecimalValue),
       this._generateTextColumn('rushAttempts', 'Att', 'Rushing Attempts'),
       this._generateTextColumn('rushYards', 'Yds', 'Rushing Yards'),
       this._generateTextColumn('rushTds', 'TD', 'Rushing Tds'),
-
-
     ]
   }
 
@@ -90,26 +82,31 @@ export default class GameLogTable extends Component {
     )
   }
 
-  _renderDateColumn(data) {
-    const dateObj = new Date(data);
+  _renderDateValue(val) {
+    const dateObj = new Date(val);
     return dateObj.toDateString();
+  }
+
+  _renderPercentageValue(val) {
+    return (val * 100).toFixed(2);
+  }
+
+  _renderDecimalValue(val) {
+    return val.toFixed(2);
   }
 
   render() {
     const columns = this._generateColumns();
-    let dataSource = null;
+    let tableData = null;
 
-    if (this.props.player) {
-      this._generatePlayerData();
+    if (this.props.gameLogs) {
+      tableData = this._generateGameLogTableData(this.props.gameLogs);
     }
-
-    console.log('dataSource : ', dataSource);
-    console.log('columns : ', columns);
 
     return (
       <div>
         <Table
-          dataSource={dataSource}
+          dataSource={tableData}
           columns={columns}
           pagination={false}
           size={'small'} />

@@ -1,4 +1,4 @@
-export default class PlayerGame {
+export default class GameLog {
 
   constructor(gameInfo) {
     this.week = gameInfo.week;
@@ -18,8 +18,8 @@ export default class PlayerGame {
     this.sacks = gameInfo.sack;
 
     // process rate stats
-    this.passYardsRate= PlayerGame.calcPassYardsRate(this.passAttempt, this.passYards)
-    this.passCompletionRate = PlayerGame.calcPassCompletionRate(this.passAttempts, this.passCompletions)
+    this.passYardsRate = GameLog.calcPassYardsRate(this.passAttempts, this.passYards)
+    this.passCompletionRate = GameLog.calcPassCompletionRate(this.passAttempts, this.passCompletions)
   }
 
   static calcPassYardsRate(passAttempts, passYards) {

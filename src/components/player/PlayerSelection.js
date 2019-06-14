@@ -28,7 +28,7 @@ export default class PlayerSelection extends Component {
   render() {
     return (
       <Dropdown overlay={this._renderMenuOverlay()}>
-        <Button>
+        <Button size='large'>
           Select Player <Icon type="down" />
         </Button>
       </Dropdown>

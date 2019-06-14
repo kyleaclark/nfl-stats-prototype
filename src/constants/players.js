@@ -21,7 +21,7 @@ export const Players = playerDataSources.map((playerData, index) => {
   const nodes = computeGameObjects(playerData.playerNodes, nodeLabels)
   const player = {
     'id': playerData.playerId,
-    'games': nodes
+    'gameLogs': nodes
   };
 
   return player;

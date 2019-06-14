@@ -13,7 +13,7 @@ export default class PlayerCard extends Component {
     return (
       <div>
         <div style={playerInfoBlock}>
-          <Avatar src={player.playerImageUrl} size={128} shape='square' />
+          <Avatar src={player.playerImageUrl} size={80} shape='square' />
         </div>
 
         <div style={playerInfoBlock}>

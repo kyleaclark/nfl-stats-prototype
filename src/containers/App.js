@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Layout } from 'antd';
+import { Icon, Layout } from 'antd';
 
 import * as CreatePlayers from '../actions/createPlayers';
 import GameLogTable from '../components/GameLog/GameLogTable';
@@ -43,21 +43,31 @@ class App extends Component {
       console.log(selectedPlayer);
     }
 
-
     return (
-      <Layout className="layout">
-        <Header>
-          <h2>NFL Stats Prototype</h2>
+      <Layout className='layout'>
+
+        <Header style={{ backgroundColor: '#111' }}>
+          <div style={{ paddingLeft: '10px' }}>
+              <Icon type="radar-chart" style={{ color: '#008ccc', fontSize: '32px', }} />
+
+              <span style={{ color: '#fff', fontSize: '24px', paddingLeft: '10px' }}>NFL Stats Prototype</span>
+          </div>
         </Header>
 
-        <Content style={{ background: '#fff', border: '0', minHeight: '400px', padding: '20px' }}>
+        <Content style={{ background: '#fff', border: '0', minHeight: '400px', padding: '20px 50px' }}>
 
-          {this.props.players
-            && <PlayerSelection players={this.props.players} onPlayerSelection={this._onPlayerSelection} />}
+          <h4>Check out 2018 player game logs and stats</h4>
+
+          <div style={{ marginBottom: '20px' }}>
+            {this.props.players
+              && <PlayerSelection players={this.props.players} onPlayerSelection={this._onPlayerSelection} />}
+          </div>
 
           {selectedPlayer && <PlayerCard player={selectedPlayer} />}
 
-          <GameLogTable player={selectedPlayer} />
+          <div style={{ margin: '20px 0' }}>
+            {selectedPlayer && <GameLogTable gameLogs={selectedPlayer.playerSeason.gameLogs} />}
+          </div>
 
         </Content>
 
