@@ -1,1 +1,13 @@
 @import '~antd/dist/antd.css';
+
+.ant-table-small {
+  margin: 0 !important;
+}
+
+.ant-table-content {
+  margin: 0 !important;
+}
+
+.ant-table-body {
+  margin: 0 !important;
+}

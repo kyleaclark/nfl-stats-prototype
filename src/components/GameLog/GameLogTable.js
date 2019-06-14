@@ -55,23 +55,34 @@ export default class GameLogTable extends Component {
   }
 
   _generateColumns() {
-    return [
-      this._generateTextColumn('week', 'Week', 'Week Number'),
-      this._generateTextColumn('gameDate', 'Date', 'Game Date', this._renderDateValue),
-      this._generateAvatarColumn('team', 'Tm', 'Team'),
-      this._generateAvatarColumn('opponent', 'Opp', 'Opponent'),
-      this._generateTextColumn('passAttempts', 'Att', 'Passing Attempts'),
-      this._generateTextColumn('passCompletions', 'Cmp', 'Completed Passes'),
-      this._generateTextColumn('passCompletionRate', 'Cmp%', 'Completion Percentage', this._renderPercentageValue),
-      this._generateTextColumn('passYards', 'Yds', 'Passing Yards'),
-      this._generateTextColumn('passTds', 'TD', 'Passing Tds'),
-      this._generateTextColumn('interceptions', 'Int', 'Interceptions Thrown'),
-      this._generateTextColumn('sacks', 'Sk', 'Times Sacked'),
-      this._generateTextColumn('passYardsRate', 'Y/A', 'Passing Yards Per Attempt', this._renderDecimalValue),
-      this._generateTextColumn('rushAttempts', 'Att', 'Rushing Attempts'),
-      this._generateTextColumn('rushYards', 'Yds', 'Rushing Yards'),
-      this._generateTextColumn('rushTds', 'TD', 'Rushing Tds'),
-    ]
+    return [{
+      title: 'Game Info',
+      children: [
+        this._generateTextColumn('week', 'Week', 'Week Number'),
+        this._generateTextColumn('gameDate', 'Date', 'Game Date', this._renderDateValue),
+        this._generateAvatarColumn('team', 'Tm', 'Team'),
+        this._generateAvatarColumn('opponent', 'Opp', 'Opponent')
+      ]
+    }, {
+      title: 'Passing',
+      children: [
+        this._generateTextColumn('passAttempts', 'Att', 'Passing Attempts'),
+        this._generateTextColumn('passCompletions', 'Cmp', 'Completed Passes'),
+        this._generateTextColumn('passCompletionRate', 'Cmp%', 'Completion Percentage', this._renderPercentageValue),
+        this._generateTextColumn('passYards', 'Yds', 'Passing Yards'),
+        this._generateTextColumn('passTds', 'TD', 'Passing Tds'),
+        this._generateTextColumn('interceptions', 'Int', 'Interceptions Thrown'),
+        this._generateTextColumn('sacks', 'Sk', 'Times Sacked'),
+        this._generateTextColumn('passYardsRate', 'Y/A', 'Passing Yards Per Attempt', this._renderDecimalValue)
+      ]
+    }, {
+      title: 'Rushing',
+      children: [
+        this._generateTextColumn('rushAttempts', 'Att', 'Rushing Attempts'),
+        this._generateTextColumn('rushYards', 'Yds', 'Rushing Yards'),
+        this._generateTextColumn('rushTds', 'TD', 'Rushing Tds')
+      ]
+    }]
   }
 
   _renderColumnName(name, title) {
@@ -109,7 +120,8 @@ export default class GameLogTable extends Component {
           dataSource={tableData}
           columns={columns}
           pagination={false}
-          size={'small'} />
+          size={'small'}
+          style={{ border: '0' }} />
       </div>
     )
   }
