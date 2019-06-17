@@ -5,6 +5,8 @@ function sortData(a, b) {
   return a < b ? -1 : a > b ? 1 : 0;
 }
 
+const monthStrings = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
 export default class GameLogTable extends Component {
 
   _generateGameLogTableData(gameLogs) {
@@ -58,7 +60,7 @@ export default class GameLogTable extends Component {
     return [{
       title: 'Game Info',
       children: [
-        this._generateTextColumn('week', 'Week', 'Week Number'),
+        this._generateTextColumn('week', 'Wk', 'Week Number'),
         this._generateTextColumn('gameDate', 'Date', 'Game Date', this._renderDateValue),
         this._generateAvatarColumn('team', 'Tm', 'Team'),
         this._generateAvatarColumn('opponent', 'Opp', 'Opponent')
@@ -95,7 +97,9 @@ export default class GameLogTable extends Component {
 
   _renderDateValue(val) {
     const dateObj = new Date(val);
-    return dateObj.toDateString();
+    const month = monthStrings[dateObj.getMonth()];
+    const day = ('0' + dateObj.getDate()).slice(-2);
+    return `${month} ${day}`;
   }
 
   _renderPercentageValue(val) {
