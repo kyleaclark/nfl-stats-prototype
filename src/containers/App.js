@@ -16,6 +16,15 @@ import './App.css';
 
 const { Header, Content, Footer } = Layout;
 
+const containerStyle = {
+  background: '#fff',
+  border: '0',
+  maxWidth: '1600px',
+  minWidth: '800px',
+  minHeight: '400px',
+  padding: '20px 50px'
+}
+
 function mapStateToProps(state) {
   return {
     players: state.players.get('players')
@@ -73,30 +82,28 @@ class App extends Component {
           </div>
         </Header>
 
-        <Content style={{ background: '#fff', border: '0', maxWidth: '1600px', minWidth: '800px', minHeight: '400px', padding: '20px 50px' }}>
+        <Content style={containerStyle}>
 
           <h4>Check out 2018 player game logs and stats</h4>
 
-          <div style={{ marginBottom: '20px' }}>
-            {this.props.players
-              && <PlayerSelection players={this.props.players} onPlayerSelection={this._onPlayerSelection} />}
+          <div style={{ marginBottom: '30px' }}>
+            <div style={{ display: 'inline-block', marginRight: '20px' }}>
+              {this.props.players
+                && <PlayerSelection players={this.props.players} onPlayerSelection={this._onPlayerSelection} />}
+            </div>
 
-              {selectedPlayer
-                && <GameLogCategorySelection
-                      onGameLogCategorySelection={this.onGameLogCategorySelection}
-                      selectedCategory={selectedGameLogCategory} />
-              }
+            <div style={{ display: 'inline-block' }}>
+                {selectedPlayer
+                  && <GameLogCategorySelection
+                        onGameLogCategorySelection={this.onGameLogCategorySelection}
+                        defaultValue={selectedGameLogCategory.id} />
+                }
+            </div>
           </div>
 
           <div>
             <div style={{ float: 'left', width: '20%' }}>
-
-
-              <div>
                 {selectedPlayer && <PlayerCard player={selectedPlayer} />}
-              </div>
-
-
             </div>
 
             <div style={{ float: 'left', width: '80%' }}>
@@ -105,7 +112,7 @@ class App extends Component {
             </div>
           </div>
 
-          <div style={{ margin: '20px 0' }}>
+          <div>
             {selectedPlayer && <GameLogTable gameLogs={selectedPlayer.playerSeason.gameLogs} />}
           </div>
 

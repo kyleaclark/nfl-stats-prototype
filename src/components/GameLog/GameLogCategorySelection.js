@@ -1,45 +1,47 @@
 import React, { Component } from 'react';
-import { Avatar, Button, Dropdown, Icon, Menu } from 'antd';
+import { Avatar, Select } from 'antd';
 
 import { GameLogPassCategories, GameLogRushCategories } from '../../constants/GameLogCategories';
 
+const { Option, OptGroup } = Select;
+
 export default class GameLogCategorySelection extends Component {
 
-  _renderMenuItem(categoryId, categoryLabel) {
-    const isSelected = categoryId === this.props.selectedCategory.id;
-
+  _renderOption(categoryId, categoryLabel) {
     return (
-      <Menu.Item key={categoryId} select >
+      <Option key={categoryId} value={categoryId}>
         {categoryLabel}
-      </Menu.Item>
+      </Option>
     )
   }
 
-  _renderMenuOverlay() {
-    let menuItems = [];
+  _renderOptionsGroup(categories, label) {
+    let options = [];
 
-    Object.values(GameLogPassCategories).forEach(category => {
-      menuItems.push(this._renderMenuItem(category.id, category.description));
-    });
-
-    Object.values(GameLogRushCategories).forEach(category => {
-      menuItems.push(this._renderMenuItem(category.id, category.description));
+    Object.values(categories).forEach(category => {
+      options.push(this._renderOption(category.id, category.description));
     });
 
     return (
-      <Menu onClick={(ev) => this.props.onGameLogCategorySelection(ev.key)} theme='light'>
-        {menuItems}
-      </Menu>
+      <OptGroup label={label}>
+        {options}
+      </OptGroup>
     );
   }
 
   render() {
+    const placeholder = this.props.defaultValue || 'Select Game Log Stat';
+
     return (
-      <Dropdown overlay={this._renderMenuOverlay()}>
-        <Button size='large'>
-          Select Game Log Stat <Icon type='down' />
-        </Button>
-      </Dropdown>
+      <Select
+        defaultValue={placeholder}
+        size='large'
+        style={{ width: '200px' }} 
+        onChange={(value) => this.props.onGameLogCategorySelection(value)}
+      >
+        {this._renderOptionsGroup(GameLogPassCategories, 'Passing Stats')}
+        {this._renderOptionsGroup(GameLogRushCategories, 'Rushing Stats')}
+      </Select>
     )
   }
 }
