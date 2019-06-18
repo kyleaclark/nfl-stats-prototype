@@ -5,7 +5,10 @@ import { withRouter } from 'react-router-dom';
 import { Icon, Layout } from 'antd';
 
 import * as CreatePlayers from '../actions/createPlayers';
+import { GameLogPassCategories, GameLogRushCategories } from '../constants/GameLogCategories';
 import GameLogTable from '../components/GameLog/GameLogTable';
+import GameLogChart from '../components/GameLog/GameLogChart';
+import GameLogCategorySelection from '../components/GameLog/GameLogCategorySelection';
 import PlayerCard from '../components/Player/PlayerCard';
 import PlayerSelection from '../components/Player/PlayerSelection';
 
@@ -32,10 +35,26 @@ class App extends Component {
   }
 
   _onPlayerSelection = (playerId) => {
-    this.setState({ selectedPlayerId: playerId });
+    this.setState({
+      selectedPlayerId: playerId,
+      selectedGameLogCategory: GameLogPassCategories.passAttempts
+    });
+  }
+
+  onGameLogCategorySelection = (gameLogCategoryId) => {
+    let gameLogCategory = this.state.selectedGameLogCategory;
+
+    if (gameLogCategoryId in GameLogPassCategories) {
+      gameLogCategory = GameLogPassCategories[gameLogCategoryId];
+    } else if (gameLogCategoryId in GameLogRushCategories) {
+      gameLogCategory = GameLogRushCategories[gameLogCategoryId];
+    }
+
+    this.setState({ selectedGameLogCategory: gameLogCategory });
   }
 
   render() {
+    const selectedGameLogCategory = this.state.selectedGameLogCategory;
     let selectedPlayer = null;
 
     if (this.props.players && this.state.selectedPlayerId in this.props.players) {
@@ -44,7 +63,7 @@ class App extends Component {
     }
 
     return (
-      <Layout className='layout'>
+      <Layout className='layout' style={{ backgroundColor: '#fff', margin: '0 auto' }}>
 
         <Header style={{ backgroundColor: '#111' }}>
           <div style={{ paddingLeft: '10px' }}>
@@ -54,16 +73,37 @@ class App extends Component {
           </div>
         </Header>
 
-        <Content style={{ background: '#fff', border: '0', minHeight: '400px', padding: '20px 50px' }}>
+        <Content style={{ background: '#fff', border: '0', maxWidth: '1600px', minWidth: '800px', minHeight: '400px', padding: '20px 50px' }}>
 
           <h4>Check out 2018 player game logs and stats</h4>
 
           <div style={{ marginBottom: '20px' }}>
             {this.props.players
               && <PlayerSelection players={this.props.players} onPlayerSelection={this._onPlayerSelection} />}
+
+              {selectedPlayer
+                && <GameLogCategorySelection
+                      onGameLogCategorySelection={this.onGameLogCategorySelection}
+                      selectedCategory={selectedGameLogCategory} />
+              }
           </div>
 
-          {selectedPlayer && <PlayerCard player={selectedPlayer} />}
+          <div>
+            <div style={{ float: 'left', width: '20%' }}>
+
+
+              <div>
+                {selectedPlayer && <PlayerCard player={selectedPlayer} />}
+              </div>
+
+
+            </div>
+
+            <div style={{ float: 'left', width: '80%' }}>
+              {selectedGameLogCategory
+                && <GameLogChart gameLogCategory={selectedGameLogCategory} player={selectedPlayer} />}
+            </div>
+          </div>
 
           <div style={{ margin: '20px 0' }}>
             {selectedPlayer && <GameLogTable gameLogs={selectedPlayer.playerSeason.gameLogs} />}

@@ -18,8 +18,11 @@ export default class GameLog {
     this.sacks = gameInfo.sack;
 
     // process rate stats
-    this.passYardsRate = GameLog.calcPassYardsRate(this.passAttempts, this.passYards)
-    this.passCompletionRate = GameLog.calcPassCompletionRate(this.passAttempts, this.passCompletions)
+    this.passYardsRate = GameLog.calcPassYardsRate(this.passAttempts, this.passYards);
+    this.passCompletionRate = GameLog.calcPassCompletionRate(this.passAttempts, this.passCompletions);
+    this.adjustedPassYardsRate = GameLog.calcAdjustedPassYardsRate(
+      this.passAttempts, this.passYards, this.passTds, this.interceptions
+    );
   }
 
   static calcPassYardsRate(passAttempts, passYards) {
@@ -28,6 +31,10 @@ export default class GameLog {
 
   static calcPassCompletionRate(passAttempts, passCompletions) {
     return passCompletions / passAttempts;
+  }
+
+  static calcAdjustedPassYardsRate(passAttempts, passYards, passTds, ints) {
+    return ((passYards + (20 * (passTds)) - (45 * (ints))) / passAttempts);
   }
 
 }

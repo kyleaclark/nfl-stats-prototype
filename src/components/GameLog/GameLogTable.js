@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Avatar, Table, Tooltip } from 'antd';
 
+import { GameLogInfoCategories, GameLogPassCategories, GameLogRushCategories } from '../../constants/GameLogCategories';
+
 function sortData(a, b) {
   return a < b ? -1 : a > b ? 1 : 0;
 }
@@ -40,7 +42,7 @@ export default class GameLogTable extends Component {
     }
   }
 
-  _generateTextColumn(key, name, title, renderFn) {
+  _generateDefaultColumn(key, name, title, renderFn) {
     const column = {
       title: this._renderColumnName(name, title),
       dataIndex: key,
@@ -56,34 +58,41 @@ export default class GameLogTable extends Component {
     return column;
   }
 
+  _generateColumnsByCategory(gameLogCategories) {
+    const renderFnMap = {
+      'date': this._renderDateValue,
+      'decimal': this._renderDecimalValue,
+      'int': null,
+      'percentage': this._renderPercentageValue,
+      'text': null
+    };
+
+    let columns = [];
+    Object.values(gameLogCategories).forEach((category) => {
+      if (category.type === 'avatar') {
+        columns.push(this._generateAvatarColumn(
+          category.id, category.shorthand, category.description
+        ));
+      } else {
+        columns.push(this._generateDefaultColumn(
+          category.id, category.shorthand, category.description, renderFnMap[category.type]
+        ));
+      }
+    });
+
+    return columns;
+  }
+
   _generateColumns() {
     return [{
       title: 'Game Info',
-      children: [
-        this._generateTextColumn('week', 'Wk', 'Week Number'),
-        this._generateTextColumn('gameDate', 'Date', 'Game Date', this._renderDateValue),
-        this._generateAvatarColumn('team', 'Tm', 'Team'),
-        this._generateAvatarColumn('opponent', 'Opp', 'Opponent')
-      ]
+      children: this._generateColumnsByCategory(GameLogInfoCategories)
     }, {
       title: 'Passing',
-      children: [
-        this._generateTextColumn('passAttempts', 'Att', 'Passing Attempts'),
-        this._generateTextColumn('passCompletions', 'Cmp', 'Completed Passes'),
-        this._generateTextColumn('passCompletionRate', 'Cmp%', 'Completion Percentage', this._renderPercentageValue),
-        this._generateTextColumn('passYards', 'Yds', 'Passing Yards'),
-        this._generateTextColumn('passTds', 'TD', 'Passing Tds'),
-        this._generateTextColumn('interceptions', 'Int', 'Interceptions Thrown'),
-        this._generateTextColumn('sacks', 'Sk', 'Times Sacked'),
-        this._generateTextColumn('passYardsRate', 'Y/A', 'Passing Yards Per Attempt', this._renderDecimalValue)
-      ]
+      children: this._generateColumnsByCategory(GameLogPassCategories)
     }, {
       title: 'Rushing',
-      children: [
-        this._generateTextColumn('rushAttempts', 'Att', 'Rushing Attempts'),
-        this._generateTextColumn('rushYards', 'Yds', 'Rushing Yards'),
-        this._generateTextColumn('rushTds', 'TD', 'Rushing Tds')
-      ]
+      children: this._generateColumnsByCategory(GameLogRushCategories)
     }]
   }
 
