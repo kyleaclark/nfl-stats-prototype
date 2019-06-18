@@ -40,6 +40,9 @@ export const GameLogPassCategories = {
   },
   'adjustedPassYardsRate': {
     id: 'adjustedPassYardsRate', shorthand: 'AY/A', description: 'Adjusted Passing Yards Per Attempt', type: 'decimal'
+  },
+  'passRating': {
+    id: 'passRating', shorthand: 'Rating', description: 'Passer Rating', type: 'decimal'
   }
 };
 

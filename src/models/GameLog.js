@@ -23,18 +23,36 @@ export default class GameLog {
     this.adjustedPassYardsRate = GameLog.calcAdjustedPassYardsRate(
       this.passAttempts, this.passYards, this.passTds, this.interceptions
     );
+    this.passRating = GameLog.calcPassRating(
+      this.passAttempts, this.passCompletions, this.passYards, this.passTds, this.interceptions
+    );
   }
 
-  static calcPassYardsRate(passAttempts, passYards) {
-    return passYards / passAttempts;
+  static calcPassYardsRate(att, yards) {
+    return yards / att;
   }
 
-  static calcPassCompletionRate(passAttempts, passCompletions) {
-    return passCompletions / passAttempts;
+  static calcPassCompletionRate(att, cmp) {
+    return cmp / att;
   }
 
-  static calcAdjustedPassYardsRate(passAttempts, passYards, passTds, ints) {
-    return ((passYards + (20 * (passTds)) - (45 * (ints))) / passAttempts);
+  static calcAdjustedPassYardsRate(att, yards, tds, ints) {
+    return ((yards + (20 * (tds)) - (45 * (ints))) / att);
+  }
+
+  static calcPassRating(att, cmp, yards, tds, ints) {
+    function calcMinMaxVal(val) {
+      val = Math.min(val, 2.375);
+      val = Math.max(val, 0);
+      return val;
+    }
+
+    const a = calcMinMaxVal(((cmp / att) - .3) * 5);
+    const b = calcMinMaxVal(((yards / att) - 3) * .25);
+    const c = calcMinMaxVal(((tds / att) * 20));
+    const d = calcMinMaxVal(2.375 - ((ints / att) * 25));
+
+    return ((a + b + c + d) / 6) * 100;
   }
 
 }
