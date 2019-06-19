@@ -1,27 +1,47 @@
 import React, { Component } from 'react';
-import { Avatar} from 'antd';
+import { Avatar, Card, Statistic, Row, Col, Button } from 'antd';
 
-const playerInfoBlock = {
-  display: 'inline-block'
-};
 
 export default class PlayerCard extends Component {
 
+  _renderCardTitle(name, imageUrl) {
+    return (
+      <Row gutter={4}>
+        <Col span={8}>
+          <Avatar src={imageUrl} size={64} shape='square' />
+        </Col>
+
+        <Col span={16}>
+          <h4>{name}<br />2018 Stats</h4>
+        </Col>
+      </Row>
+    )
+  }
+
   render() {
     const player = this.props.player;
+    const playerSeason = player.playerSeason;
 
     return (
-      <div>
-        <div style={playerInfoBlock}>
-          <Avatar src={player.playerImageUrl} size={80} shape='square' />
-        </div>
+        <Card title={this._renderCardTitle(player.fullName, player.playerImageUrl)} style={{ width: '100%' }}>
+          <Row gutter={8}>
+            <Col span={12}>
+              <Statistic title="Attempts" value={playerSeason.sumStats.passAttempts} />
+            </Col>
+            <Col span={12}>
+              <Statistic title="Completions" value={playerSeason.sumStats.passCompletions} />
+            </Col>
+          </Row>
 
-        <div style={playerInfoBlock}>
-          <h3>
-            {player.fullName}<br />{player.playerSeason.seasonYear} Game Logs
-          </h3>
-        </div>
-      </div>
+          <Row gutter={8}>
+            <Col span={12}>
+              <Statistic title="Passing Yards" value={playerSeason.sumStats.passYards} />
+            </Col>
+            <Col span={12}>
+              <Statistic title="Passing Tds" value={playerSeason.sumStats.passTds} />
+            </Col>
+          </Row>
+        </Card>
     )
   }
 }

@@ -14,6 +14,8 @@ export default class Player {
     playerGameLogs.forEach((gameLogInfo, index) => {
       this.playerSeason.computeGameInfo(gameLogInfo);
     });
+
+    this.playerSeason.computeSeasonStats();
   }
 
 }

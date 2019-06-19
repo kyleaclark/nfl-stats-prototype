@@ -1,4 +1,21 @@
+import { max, mean, median, min, standardDeviation, sum } from 'simple-statistics';
+
+import {
+  GameLogInfoCategories,
+  GameLogPassCategories,
+  GameLogRushCategories,
+  GameLogPassRatingCategories,
+  GameLogPassRatingScaleCategories
+} from '../constants/GameLogCategories';
 import GameLog from './GameLog';
+
+const gameLogCategories = [
+  GameLogInfoCategories,
+  GameLogPassCategories,
+  GameLogRushCategories,
+  GameLogPassRatingCategories,
+  GameLogPassRatingScaleCategories
+];
 
 export default class PlayerSeason {
 
@@ -9,50 +26,50 @@ export default class PlayerSeason {
 
   intoSeasonProps() {
     this.gameLogs = [];
-    this.gamesPlayed = 0;
-    this.weekIndexKeyMap = {};
-    this.weeks = [];
-    this.gameDates = [];
-    this.teams = [];
-    this.teamImageUrls = [];
-    this.opponents = [];
-    this.opponentImageUrls = [];
-    this.passAttempts = [];
-    this.passCompletions = [];
-    this.passYards = [];
-    this.passTds = [];
-    this.rushAttempts = [];
-    this.rushYards = [];
-    this.rushTds = [];
-    this.interceptions = [];
-    this.sacks = [];
-    this.passYardsRates = [];
-    this.passCompletionRates = [];
+    this.seasonCategories = {};
+
+    gameLogCategories.forEach(categoryGroup => {
+      Object.values(categoryGroup).forEach(category => {
+        this.seasonCategories[category.id] = [];
+      });
+    });
+
+    this.seasonCategories['teamImageUrl'] = [];
+    this.seasonCategories['opponentImageUrl'] = [];
+
+    this.sumStats = {};
+    this.minStats = {};
+    this.maxStats = {};
+    this.avgStats = {};
+    this.medStats = {};
+    this.stdStats = {};
   }
 
   computeGameInfo(gameLogInfo) {
-    const gameLog = new GameLog(gameLogInfo);
-    this.gameLogs.push(gameLog);
+    this.gameLogs.push(new GameLog(gameLogInfo));
+  }
 
-    // process game details and counting stats
-    this.gamesPlayed += 1;
-    this.weeks.push(gameLog.week);
-    this.gameDates.push(gameLog.gameDate);
-    this.teams.push(gameLog.team)
-    this.teamImageUrls.push(gameLog.teamImageUrl);
-    this.opponents.push(gameLog.opponent);
-    this.opponentImageUrls.push(gameLog.opponentImageUrl);
-    this.passAttempts.push(gameLog.passAttempts);
-    this.passCompletions.push(gameLog.passCompletions);
-    this.passYards.push(gameLog.passYards);
-    this.passTds.push(gameLog.passTds);
-    this.rushAttempts.push(gameLog.rushAttempts);
-    this.rushYards.push(gameLog.rushYards);
-    this.rushTds.push(gameLog.rushTds);
-    this.interceptions.push(gameLog.interceptions);
-    this.sacks.push(gameLog.sacks);
-    this.passYardsRates.push(gameLog.passYardRate);
-    this.passCompletionRates.push(gameLog.passCompletionRate);
+  computeSeasonStats() {
+    this.gameLogs.forEach(gameLog => {
+      Object.entries(gameLog).forEach(entry => {
+        let key = entry[0];
+        let value = entry[1];
+        this.seasonCategories[key].push(value);
+      });
+    });
+
+    gameLogCategories.forEach(categoryGroup => {
+      Object.values(categoryGroup).forEach(category => {
+        const key = category.id;
+        const stats = this.seasonCategories[key];
+        this.sumStats[key] = sum(stats);
+        this.minStats[key] = min(stats);
+        this.maxStats[key] = max(stats);
+        this.avgStats[key] = mean(stats);
+        this.medStats[key] = median(stats);
+        this.stdStats[key] = standardDeviation(stats);
+      });
+    });
   }
 
 }

@@ -84,7 +84,7 @@ class App extends Component {
 
         <Content style={containerStyle}>
 
-          <h4>Check out 2018 player game logs and stats</h4>
+          <h3>Check out 2018 player game logs and stats</h3>
 
           <div style={{ marginBottom: '30px' }}>
             <div style={{ display: 'inline-block', marginRight: '20px' }}>

@@ -56,4 +56,82 @@ export const GameLogRushCategories = {
   'rushTds': {
     id: 'rushTds', shorthand: 'TD', description: 'Rushing Tds', type: 'int'
   }
-}
+};
+
+export const GameLogPassRatingCategories = {
+  'completionsToAttemptsRating': {
+    id: 'completionsToAttemptsRating',
+    shorthand: 'Cmp to Att',
+    description: 'Completions to Attempts Rating',
+    type: 'decimal'
+  },
+  'yardsToAttemptsRating': {
+    id: 'yardsToAttemptsRating',
+    shorthand: 'Yds to Att',
+    description: 'Yards to Attempts Rating',
+    type: 'decimal'
+  },
+  'completionsToAttemptsRating': {
+    id: 'completionsToAttemptsRating',
+    shorthand: 'Cmp to Att',
+    description: 'Completions to Attempts Rating',
+    type: 'decimal'
+  },
+  'tdsToAttemptsRating': {
+    id: 'tdsToAttemptsRating',
+    shorthand: 'TD to Att',
+    description: 'Touchdowns to Attempts Rating',
+    type: 'decimal'
+  },
+  'intsToAttemptsRating': {
+    id: 'intsToAttemptsRating',
+    shorthand: 'Int to Att',
+    description: 'Interceptions to Attempts Rating',
+    type: 'decimal'
+  },
+  'passRating': {
+    id: 'passRating',
+    shorthand: 'Rating',
+    description: 'Passer Rating',
+    type: 'decimal'
+  }
+};
+
+export const GameLogPassRatingScaleCategories = {
+  'completionsToAttemptsRatingScale': {
+    id: 'completionsToAttemptsRatingScale',
+    shorthand: 'Cmp to Att',
+    description: 'Completions to Attempts Rating Scale',
+    type: 'decimal'
+  },
+  'yardsToAttemptsRatingScale': {
+    id: 'yardsToAttemptsRatingScale',
+    shorthand: 'Yds to Att',
+    description: 'Yards to Attempts Rating Scale',
+    type: 'decimal'
+  },
+  'completionsToAttemptsRatingScale': {
+    id: 'completionsToAttemptsRatingScale',
+    shorthand: 'Cmp to Att',
+    description: 'Completions to Attempts Rating Scale',
+    type: 'decimal'
+  },
+  'tdsToAttemptsRatingScale': {
+    id: 'tdsToAttemptsRatingScale',
+    shorthand: 'TD to Att',
+    description: 'Touchdowns to Attempts Rating Scale',
+    type: 'decimal'
+  },
+  'intsToAttemptsRatingScale': {
+    id: 'intsToAttemptsRatingScale',
+    shorthand: 'Int to Att',
+    description: 'Interceptions to Attempts Rating Scale',
+    type: 'decimal'
+  },
+  'passRatingScale': {
+    id: 'passRatingScale',
+    shorthand: 'Rating',
+    description: 'Passer Rating Scale',
+    type: 'decimal'
+  }
+};
