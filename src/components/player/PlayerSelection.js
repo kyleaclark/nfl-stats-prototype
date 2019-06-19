@@ -32,7 +32,7 @@ export default class PlayerSelection extends Component {
     const placeholder = this.props.defaultValue || 'Select Player';
 
     return (
-      <Select defaultValue={placeholder} size='large' style={{ width: '200px' }} onChange={(value) => this.props.onPlayerSelection(value)}>
+      <Select defaultValue={placeholder} size='large' style={{ width: '220px' }} onChange={(value) => this.props.onPlayerSelection(value)}>
         {this._renderOptionsGroup(this.props.players, 'Quarterbacks')}
       </Select>
     )

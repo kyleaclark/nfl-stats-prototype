@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Icon, Layout } from 'antd';
+import { Icon, Layout, Row, Col } from 'antd';
 
 import * as CreatePlayers from '../actions/createPlayers';
 import { GameLogPassCategories, GameLogRushCategories } from '../constants/GameLogCategories';
@@ -62,6 +62,50 @@ class App extends Component {
     this.setState({ selectedGameLogCategory: gameLogCategory });
   }
 
+  _renderGameLogTable(selectedPlayer) {
+    return (
+      <Row gutter={8} style={{ marginBottom: '40px' }}>
+        <Col span={24}>
+          {selectedPlayer && <GameLogTable gameLogs={selectedPlayer.playerSeason.gameLogs} />}
+        </Col>
+      </Row>
+    );
+  }
+
+  _renderPlayerOverview(selectedPlayer, selectedGameLogCategory) {
+    return (
+      <Row gutter={8} style={{ marginBottom: '40px' }}>
+        <Col span={6}>
+          {selectedPlayer && <PlayerCard player={selectedPlayer} />}
+        </Col>
+
+        <Col span={18}>
+          {selectedGameLogCategory
+            && <GameLogChart gameLogCategory={selectedGameLogCategory} player={selectedPlayer} />}
+        </Col>
+      </Row>
+    )
+  }
+
+  _renderSelection(selectedPlayer, selectedGameLogCategory) {
+    return (
+      <Row gutter={16} style={{ marginBottom: '40px' }}>
+        <Col span={4}>
+          {this.props.players
+            && <PlayerSelection players={this.props.players} onPlayerSelection={this._onPlayerSelection} />}
+        </Col>
+
+        <Col span={4}>
+          {selectedPlayer
+            && <GameLogCategorySelection
+                  onGameLogCategorySelection={this.onGameLogCategorySelection}
+                  defaultValue={selectedGameLogCategory.id} />
+          }
+        </Col>
+      </Row>
+    );
+  }
+
   render() {
     const selectedGameLogCategory = this.state.selectedGameLogCategory;
     let selectedPlayer = null;
@@ -86,35 +130,11 @@ class App extends Component {
 
           <h3>Check out 2018 player game logs and stats</h3>
 
-          <div style={{ marginBottom: '30px' }}>
-            <div style={{ display: 'inline-block', marginRight: '20px' }}>
-              {this.props.players
-                && <PlayerSelection players={this.props.players} onPlayerSelection={this._onPlayerSelection} />}
-            </div>
+          {this._renderSelection(selectedPlayer, selectedGameLogCategory)}
 
-            <div style={{ display: 'inline-block' }}>
-                {selectedPlayer
-                  && <GameLogCategorySelection
-                        onGameLogCategorySelection={this.onGameLogCategorySelection}
-                        defaultValue={selectedGameLogCategory.id} />
-                }
-            </div>
-          </div>
+          {this._renderPlayerOverview(selectedPlayer, selectedGameLogCategory)}
 
-          <div>
-            <div style={{ float: 'left', width: '20%' }}>
-                {selectedPlayer && <PlayerCard player={selectedPlayer} />}
-            </div>
-
-            <div style={{ float: 'left', width: '80%' }}>
-              {selectedGameLogCategory
-                && <GameLogChart gameLogCategory={selectedGameLogCategory} player={selectedPlayer} />}
-            </div>
-          </div>
-
-          <div>
-            {selectedPlayer && <GameLogTable gameLogs={selectedPlayer.playerSeason.gameLogs} />}
-          </div>
+          {this._renderGameLogTable(selectedPlayer)}
 
         </Content>
 

@@ -12,7 +12,7 @@ export default class PlayerCard extends Component {
         </Col>
 
         <Col span={16}>
-          <h4>{name}<br />2018 Stats</h4>
+          <h4>{name}<br />2018 Season Stats</h4>
         </Col>
       </Row>
     )
@@ -25,20 +25,29 @@ export default class PlayerCard extends Component {
     return (
         <Card title={this._renderCardTitle(player.fullName, player.playerImageUrl)} style={{ width: '100%' }}>
           <Row gutter={8}>
-            <Col span={12}>
-              <Statistic title="Attempts" value={playerSeason.sumStats.passAttempts} />
+            <Col span={8}>
+              <Statistic title='Attempts' value={playerSeason.sumStats.passAttempts} />
             </Col>
-            <Col span={12}>
-              <Statistic title="Completions" value={playerSeason.sumStats.passCompletions} />
+            <Col span={8}>
+              <Statistic title='Completions' value={playerSeason.sumStats.passCompletions} />
+            </Col>
+            <Col span={8}>
+              <Statistic
+                title='Completion %'
+                value={playerSeason.avgStats.passCompletionRate}
+                formatter={(value) => (value * 100).toFixed(2)} />
             </Col>
           </Row>
 
           <Row gutter={8}>
-            <Col span={12}>
-              <Statistic title="Passing Yards" value={playerSeason.sumStats.passYards} />
+            <Col span={8}>
+              <Statistic title='Passing Yards' value={playerSeason.sumStats.passYards} />
             </Col>
-            <Col span={12}>
-              <Statistic title="Passing Tds" value={playerSeason.sumStats.passTds} />
+            <Col span={8}>
+              <Statistic title='Passing Tds' value={playerSeason.sumStats.passTds} />
+            </Col>
+            <Col span={8}>
+              <Statistic title='Interceptions' value={playerSeason.sumStats.interceptions} />
             </Col>
           </Row>
         </Card>
