@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { Icon, Layout, Row, Col } from 'antd';
+import { Icon, Layout, Row, Col, Card } from 'antd';
 
 import * as CreatePlayers from '../actions/createPlayers';
 import { GameLogPassCategories, GameLogRushCategories } from '../constants/GameLogCategories';
 import GameLogTable from '../components/GameLog/GameLogTable';
 import GameLogChart from '../components/GameLog/GameLogChart';
+import PassRatingRadarChart from '../components/Charts/PassRatingRadarChart';
 import GameLogCategorySelection from '../components/GameLog/GameLogCategorySelection';
 import PlayerCard from '../components/Player/PlayerCard';
 import PlayerSelection from '../components/Player/PlayerSelection';
@@ -62,11 +63,22 @@ class App extends Component {
     this.setState({ selectedGameLogCategory: gameLogCategory });
   }
 
+  _renderPassRatingRadarChart(selectedPlayer) {
+    return (
+
+        <PassRatingRadarChart
+          gameLog={selectedPlayer.playerSeason.gameLogs[0]}
+          playerName={selectedPlayer.fullName} />
+
+    )
+  }
+
   _renderGameLogTable(selectedPlayer) {
     return (
       <Row gutter={8} style={{ marginBottom: '40px' }}>
         <Col span={24}>
-          {selectedPlayer && <GameLogTable gameLogs={selectedPlayer.playerSeason.gameLogs} />}
+          <h4>2018 Game Logs</h4>
+          <GameLogTable gameLogs={selectedPlayer.playerSeason.gameLogs} />
         </Col>
       </Row>
     );
@@ -134,7 +146,7 @@ class App extends Component {
 
           {this._renderPlayerOverview(selectedPlayer, selectedGameLogCategory)}
 
-          {this._renderGameLogTable(selectedPlayer)}
+          {selectedPlayer && this._renderGameLogTable(selectedPlayer)}
 
         </Content>
 
