@@ -1,54 +1,96 @@
 import React, { Component } from 'react';
 import { Avatar, Table, Tooltip } from 'antd';
 
-import { GameLogInfoCategories, GameLogPassCategories, GameLogRushCategories } from '../../constants/GameLogCategories';
+import { GameLogPassCategories, GameLogRushCategories } from '../../constants/GameLogCategories';
 
-function sortData(a, b) {
-  return a < b ? -1 : a > b ? 1 : 0;
-}
-
-const monthStrings = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+const gameLogCategories = [GameLogPassCategories, GameLogRushCategories];
 
 export default class GameLogTable extends Component {
 
-  _generateGameLogTableData(gameLogs) {
-    return gameLogs.map((gameLog, index) => {
-      let gameLogCopy = Object.assign({}, gameLog);
-      let gameDataSource = {
-        'key': index,
-        'team': {'label': gameLogCopy.team, 'imageUrl': gameLogCopy.teamImageUrl},
-        'opponent': {'label': gameLogCopy.opponent, 'imageUrl': gameLogCopy.opponentImageUrl}
-      };
+  _generateStatGroupData(
+    statsGroup,
+    statId,
+    statLabel,
+    ignoreDecimal,
+    ignorePercentage
+  ) {
+    let statsData = {
+      'key': statId,
+      'stat': statLabel
+    };
 
-      delete gameLogCopy.team;
-      delete gameLogCopy.teamImageUrl;
-      delete gameLogCopy.opponent;
-      delete gameLogCopy.opponentImageUrl;
-
-      Object.keys(gameLogCopy).forEach(key => gameDataSource[key] = gameLogCopy[key]);
-
-      return gameDataSource;
+    Object.values(gameLogCategories).forEach(gameLogCategoryGroup => {
+      Object.values(gameLogCategoryGroup).forEach(gameLogCategory => {
+        if ((ignoreDecimal & gameLogCategory.type === 'decimal') |
+            (ignorePercentage & gameLogCategory.type === 'percentage')) {
+          statsData[gameLogCategory.id] = 'n/a';
+        } else {
+          statsData[gameLogCategory.id] = statsGroup[gameLogCategory.id];
+        }
+      });
     });
+
+    return statsData;
   }
 
-  _generateAvatarColumn(key, name, title) {
-    return {
+  _generateSeasonStatsTableData(playerSeason) {
+    const sumStats = playerSeason.sumStats;
+    const minStats = playerSeason.minStats;
+    const maxStats = playerSeason.maxStats;
+    const avgStats = playerSeason.avgStats;
+    const medStats = playerSeason.medStats;
+    const stdStats = playerSeason.stdStats;
+
+    let tableData = [];
+    tableData.push(this._generateStatGroupData(sumStats, 'sum', 'Season Total', true, true));
+    tableData.push(this._generateStatGroupData(avgStats, 'avg', 'Season Average', false, false));
+    tableData.push(this._generateStatGroupData(medStats, 'med', 'Season Median', false, false));
+    tableData.push(this._generateStatGroupData(maxStats, 'max', 'Game High', false, false));
+    tableData.push(this._generateStatGroupData(minStats, 'min', 'Game Low', false, false));
+    tableData.push(this._generateStatGroupData(stdStats, 'std', 'Standard Deviation by Game', false, false));
+
+    return tableData;
+  }
+
+  _generateColumn(key, name, title, renderFn) {
+    const column = {
       title: this._renderColumnName(name, title),
       dataIndex: key,
-      key: key,
-      sorter: (a, b) => sortData(a[key].label, b[key].label),
-      sortDirections: ['descend', 'ascend'],
-      render: (data) => <Avatar src={data.imageUrl} alt={data.label} />
+      key: key
     }
+
+    if (renderFn) {
+      column.render = (data) => renderFn(data)
+    }
+
+    return column;
   }
+
+  // _generateColumns() {
+  //   const renderFnMap = {
+  //     'date': this._renderDateValue,
+  //     'decimal': this._renderDecimalValue,
+  //     'int': null,
+  //     'percentage': this._renderPercentageValue,
+  //     'text': null
+  //   };
+  //
+  //   return [{
+  //     this._generateColumn('category', 'Category', 'Stat Category', null),
+  //     this._generateColumn('sum', 'Total', 'Total Sum', null),
+  //     this._generateColumn('min', 'Minimum', 'Minimum Value', null),
+  //     this._generateColumn('max', 'Maximum', 'Maximum Value', null),
+  //     this._generateColumn('avg', 'Average', 'Average Value', this._renderDecimalValue),
+  //     this._generateColumn('med', 'Median', 'Median Value', null),
+  //     this._generateColumn('std', 'Standard Variation', 'Standard Deviation', null)
+  //   }]
+  // }
 
   _generateDefaultColumn(key, name, title, renderFn) {
     const column = {
       title: this._renderColumnName(name, title),
       dataIndex: key,
-      key: key,
-      sorter: (a, b) => sortData(a[key], b[key]),
-      sortDirections: ['descend', 'ascend'],
+      key: key
     }
 
     if (renderFn) {
@@ -60,24 +102,16 @@ export default class GameLogTable extends Component {
 
   _generateColumnsByCategory(gameLogCategories) {
     const renderFnMap = {
-      'date': this._renderDateValue,
       'decimal': this._renderDecimalValue,
-      'int': null,
-      'percentage': this._renderPercentageValue,
-      'text': null
+      'int': this._renderIntValue,
+      'percentage': this._renderPercentageValue
     };
 
     let columns = [];
     Object.values(gameLogCategories).forEach((category) => {
-      if (category.type === 'avatar') {
-        columns.push(this._generateAvatarColumn(
-          category.id, category.shorthand, category.description
-        ));
-      } else {
-        columns.push(this._generateDefaultColumn(
-          category.id, category.shorthand, category.description, renderFnMap[category.type]
-        ));
-      }
+      columns.push(this._generateDefaultColumn(
+        category.id, category.shorthand, category.description, renderFnMap[category.type]
+      ));
     });
 
     return columns;
@@ -85,8 +119,10 @@ export default class GameLogTable extends Component {
 
   _generateColumns() {
     return [{
-      title: 'Game Info',
-      children: this._generateColumnsByCategory(GameLogInfoCategories)
+      title: 'Statistical Measure',
+      children: [
+        this._generateDefaultColumn('stat', 'Stat Type', 'Statistical Measure', null)
+      ]
     }, {
       title: 'Passing',
       children: this._generateColumnsByCategory(GameLogPassCategories)
@@ -104,18 +140,27 @@ export default class GameLogTable extends Component {
     )
   }
 
-  _renderDateValue(val) {
-    const dateObj = new Date(val);
-    const month = monthStrings[dateObj.getMonth()];
-    const day = ('0' + dateObj.getDate()).slice(-2);
-    return `${month} ${day}`;
-  }
-
   _renderPercentageValue(val) {
+    if (typeof val === 'string') {
+      return val;
+    }
+
     return (val * 100).toFixed(2);
   }
 
   _renderDecimalValue(val) {
+    if (typeof val === 'string') {
+      return val;
+    }
+
+    return val.toFixed(2);
+  }
+
+  _renderIntValue(val) {
+    if (Number.isInteger(val)) {
+      return val;
+    }
+
     return val.toFixed(2);
   }
 
@@ -123,8 +168,8 @@ export default class GameLogTable extends Component {
     const columns = this._generateColumns();
     let tableData = null;
 
-    if (this.props.gameLogs) {
-      tableData = this._generateGameLogTableData(this.props.gameLogs);
+    if (this.props.playerSeason) {
+      tableData = this._generateSeasonStatsTableData(this.props.playerSeason);
     }
 
     return (

@@ -8,6 +8,7 @@ import * as CreatePlayers from '../actions/createPlayers';
 import { GameLogPassCategories, GameLogRushCategories } from '../constants/GameLogCategories';
 import GameLogTable from '../components/GameLog/GameLogTable';
 import GameLogChart from '../components/GameLog/GameLogChart';
+import SeasonStatsTable from '../components/SeasonStats/SeasonStatsTable';
 import PassRatingRadarChart from '../components/Charts/PassRatingRadarChart';
 import GameLogCategorySelection from '../components/GameLog/GameLogCategorySelection';
 import PlayerCard from '../components/Player/PlayerCard';
@@ -78,6 +79,18 @@ class App extends Component {
 
     )
   }
+
+  _renderSeasonStatsTable(selectedPlayer) {
+    return (
+      <Row gutter={8} style={{ marginBottom: '40px' }}>
+        <Col span={24}>
+          <h4>2018 Season Stats Summary</h4>
+          <SeasonStatsTable playerSeason={selectedPlayer.playerSeason} />
+        </Col>
+      </Row>
+    );
+  }
+
 
   _renderGameLogTable(selectedPlayer) {
     return (
@@ -151,6 +164,8 @@ class App extends Component {
               {selectedPlayer && this._renderPlayerOverview(selectedPlayer, selectedGameLogCategory)}
 
               {selectedPlayer && this._renderGameLogTable(selectedPlayer)}
+
+              {selectedPlayer && this._renderSeasonStatsTable(selectedPlayer)}
 
             </div>
           </Col>
