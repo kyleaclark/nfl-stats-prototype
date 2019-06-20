@@ -92,7 +92,7 @@ class App extends Component {
 
   _renderPlayerOverview(selectedPlayer, selectedGameLogCategory) {
     return (
-      <Row gutter={8} style={{ marginBottom: '40px' }}>
+      <Row gutter={8} style={{ marginBottom: '25px' }}>
         <Col xs={24} lg={8} xl={6}>
           <PlayerCard player={selectedPlayer} />
         </Col>
