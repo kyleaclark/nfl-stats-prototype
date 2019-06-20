@@ -17,15 +17,6 @@ import './App.css';
 
 const { Header, Content, Footer } = Layout;
 
-const containerStyle = {
-  background: '#fff',
-  border: '0',
-  maxWidth: '1600px',
-  minWidth: '800px',
-  minHeight: '400px',
-  padding: '20px 50px'
-}
-
 function mapStateToProps(state) {
   return {
     players: state.players.get('players')
@@ -40,14 +31,29 @@ class App extends Component {
 
   constructor(props) {
     super(props)
-    this.props.createPlayers();
-    this.state = { selectedPlayerId: null };
+    this.state = {
+      selectedPlayer: null,
+      selectedGameLogCategory: GameLogPassCategories.passAttempts
+    };
+  }
+
+  componentDidMount() {
+    this.props.createPlayers()
+      .then(() => {
+        this.setState({
+          selectedPlayer: this.props.players[Object.keys(this.props.players)[0]]
+        });
+      })
+      .catch((error) => {
+        // TODO: Handle error in the UI for the user
+        console.error('createPlayers : ', error);
+      });
+
   }
 
   _onPlayerSelection = (playerId) => {
     this.setState({
-      selectedPlayerId: playerId,
-      selectedGameLogCategory: GameLogPassCategories.passAttempts
+      selectedPlayer: this.props.players[playerId]
     });
   }
 
@@ -87,13 +93,12 @@ class App extends Component {
   _renderPlayerOverview(selectedPlayer, selectedGameLogCategory) {
     return (
       <Row gutter={8} style={{ marginBottom: '40px' }}>
-        <Col span={6}>
-          {selectedPlayer && <PlayerCard player={selectedPlayer} />}
+        <Col xs={24} lg={8} xl={6}>
+          <PlayerCard player={selectedPlayer} />
         </Col>
 
-        <Col span={18}>
-          {selectedGameLogCategory
-            && <GameLogChart gameLogCategory={selectedGameLogCategory} player={selectedPlayer} />}
+        <Col xs={24} lg={16} xl={18}>
+          <GameLogChart gameLogCategory={selectedGameLogCategory} player={selectedPlayer} />
         </Col>
       </Row>
     )
@@ -102,17 +107,17 @@ class App extends Component {
   _renderSelection(selectedPlayer, selectedGameLogCategory) {
     return (
       <Row gutter={16} style={{ marginBottom: '40px' }}>
-        <Col span={4}>
-          {this.props.players
-            && <PlayerSelection players={this.props.players} onPlayerSelection={this._onPlayerSelection} />}
-        </Col>
+        <Col xs={24}>
 
-        <Col span={4}>
-          {selectedPlayer
-            && <GameLogCategorySelection
-                  onGameLogCategorySelection={this.onGameLogCategorySelection}
-                  defaultValue={selectedGameLogCategory.id} />
-          }
+          <PlayerSelection
+            defaultValue={selectedPlayer.id}
+            players={this.props.players}
+            onPlayerSelection={this._onPlayerSelection} />
+
+          <GameLogCategorySelection
+              onGameLogCategorySelection={this.onGameLogCategorySelection}
+              defaultValue={selectedGameLogCategory.id} />
+
         </Col>
       </Row>
     );
@@ -120,39 +125,46 @@ class App extends Component {
 
   render() {
     const selectedGameLogCategory = this.state.selectedGameLogCategory;
-    let selectedPlayer = null;
-
-    if (this.props.players && this.state.selectedPlayerId in this.props.players) {
-      selectedPlayer = this.props.players[this.state.selectedPlayerId];
-      console.log(selectedPlayer);
-    }
+    const selectedPlayer = this.state.selectedPlayer;
 
     return (
-      <Layout className='layout' style={{ backgroundColor: '#fff', margin: '0 auto' }}>
+      <div style={{ backgroundColor: '#fff' }}>
 
-        <Header style={{ backgroundColor: '#111' }}>
-          <div style={{ paddingLeft: '10px' }}>
+        <Row style={{ backgroundColor: '#111' }}>
+          <Col span={24}>
+            <div style={{ margin: '0 auto', maxWidth: '1600px', padding: '20px' }}>
               <Icon type="radar-chart" style={{ color: '#008ccc', fontSize: '32px', }} />
 
               <span style={{ color: '#fff', fontSize: '24px', paddingLeft: '10px' }}>NFL Stats Prototype</span>
-          </div>
-        </Header>
+            </div>
+          </Col>
+        </Row>
 
-        <Content style={containerStyle}>
+        <Row>
+          <Col span={24}>
+            <div style={{ margin: '0 auto', maxWidth: '1600px', padding: '20px' }}>
 
-          <h3>Check out 2018 player game logs and stats</h3>
+              <h3>Check out 2018 player game logs and stats</h3>
 
-          {this._renderSelection(selectedPlayer, selectedGameLogCategory)}
+              {selectedPlayer && this._renderSelection(selectedPlayer, selectedGameLogCategory)}
 
-          {this._renderPlayerOverview(selectedPlayer, selectedGameLogCategory)}
+              {selectedPlayer && this._renderPlayerOverview(selectedPlayer, selectedGameLogCategory)}
 
-          {selectedPlayer && this._renderGameLogTable(selectedPlayer)}
+              {selectedPlayer && this._renderGameLogTable(selectedPlayer)}
 
-        </Content>
+            </div>
+          </Col>
+        </Row>
 
-        <Footer style={{ textAlign: 'center' }}>NFL Stats Prototype - Created by Kyle Clark</Footer>
+        <Row style={{ backgroundColor: '#eee', textAlign: 'center' }}>
+          <Col span={24}>
+            <div style={{ margin: '0 auto', maxWidth: '1600px', padding: '20px', textAlign: 'center' }}>
+              NFL Stats Prototype - Created by Kyle Clark
+            </div>
+          </Col>
+        </Row>
 
-      </Layout>
+      </div>
     );
   }
 

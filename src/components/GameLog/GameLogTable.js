@@ -105,9 +105,10 @@ export default class GameLogTable extends Component {
   }
 
   _renderDateValue(val) {
-    const dateObj = new Date(val);
-    const month = monthStrings[dateObj.getMonth()];
-    const day = ('0' + dateObj.getDate()).slice(-2);
+    const dateStr = val.replace(/-/g, '/');
+    const parsedDate = new Date(dateStr);
+    const month = monthStrings[parsedDate.getMonth()];
+    const day = ('0' + parsedDate.getDate()).slice(-2);
     return `${month} ${day}`;
   }
 
