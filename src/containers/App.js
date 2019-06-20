@@ -8,11 +8,13 @@ import * as CreatePlayers from '../actions/createPlayers';
 import { GameLogPassCategories, GameLogRushCategories } from '../constants/GameLogCategories';
 import GameLogTable from '../components/GameLog/GameLogTable';
 import GameLogChart from '../components/GameLog/GameLogChart';
-import SeasonStatsTable from '../components/SeasonStats/SeasonStatsTable';
-import PassRatingRadarChart from '../components/Charts/PassRatingRadarChart';
+import GameLogWeekSelection from '../components/GameLog/GameLogWeekSelection';
+import GameLogPassRatingRadarChart from '../components/GameLog/GameLogPassRatingRadarChart';
+import GameLogPassRatingStats from '../components/GameLog/GameLogPassRatingStats';
 import GameLogCategorySelection from '../components/GameLog/GameLogCategorySelection';
 import PlayerCard from '../components/Player/PlayerCard';
 import PlayerSelection from '../components/Player/PlayerSelection';
+import SeasonStatsTable from '../components/SeasonStats/SeasonStatsTable';
 
 import './App.css';
 
@@ -34,7 +36,8 @@ class App extends Component {
     super(props)
     this.state = {
       selectedPlayer: null,
-      selectedGameLogCategory: GameLogPassCategories.passAttempts
+      selectedGameLogCategory: GameLogPassCategories.passAttempts,
+      gameLogWeekIndex: 0
     };
   }
 
@@ -54,7 +57,9 @@ class App extends Component {
 
   _onPlayerSelection = (playerId) => {
     this.setState({
-      selectedPlayer: this.props.players[playerId]
+      selectedPlayer: this.props.players[playerId],
+      selectedGameLogCategory: GameLogPassCategories.passAttempts,
+      gameLogWeekIndex: 0
     });
   }
 
@@ -70,13 +75,42 @@ class App extends Component {
     this.setState({ selectedGameLogCategory: gameLogCategory });
   }
 
-  _renderPassRatingRadarChart(selectedPlayer) {
+  onGameLogWeekSelection = (gameLogWeekIndex) => {
+    this.setState({ gameLogWeekIndex: gameLogWeekIndex });
+  }
+
+  _renderGameLogPassRatingSummary(selectedPlayer) {
+    const gameLogWeekIndex = this.state.gameLogWeekIndex;
+    const gameLog = selectedPlayer.playerSeason.gameLogs[gameLogWeekIndex];
+    const weeks = selectedPlayer.playerSeason.seasonCategories.week;
+
+    console.log('gameLogWeekIndex : ', gameLogWeekIndex);
+
     return (
+      <Card title='Passer Rating Breakdown by Game Log' type='inner' style={{ marginBottom: '40px' }}>
 
-        <PassRatingRadarChart
-          gameLog={selectedPlayer.playerSeason.gameLogs[0]}
-          playerName={selectedPlayer.fullName} />
+        <Row gutter={8}>
+          <Col xs={24} lg={8}>
+            <GameLogWeekSelection
+              defaultValue={gameLogWeekIndex}
+              weeks={weeks}
+              onGameLogWeekSelection={this.onGameLogWeekSelection} />
 
+            <GameLogPassRatingStats gameLog={gameLog} />
+          </Col>
+
+          <Col xs={24} lg={16}>
+            <Row style={{ marginTop: '30px' }}>
+              <Col xs={{span: 24, offset: 0}} lg={{span: 16, offset: 4}}>
+                <GameLogPassRatingRadarChart
+                  gameLog={gameLog}
+                  playerName={selectedPlayer.fullName} />
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+
+      </Card>
     )
   }
 
@@ -163,9 +197,11 @@ class App extends Component {
 
               {selectedPlayer && this._renderPlayerOverview(selectedPlayer, selectedGameLogCategory)}
 
+              {selectedPlayer && this._renderSeasonStatsTable(selectedPlayer)}
+
               {selectedPlayer && this._renderGameLogTable(selectedPlayer)}
 
-              {selectedPlayer && this._renderSeasonStatsTable(selectedPlayer)}
+              {selectedPlayer && this._renderGameLogPassRatingSummary(selectedPlayer)}
 
             </div>
           </Col>

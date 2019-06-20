@@ -79,7 +79,7 @@ export const GameLogPassRatingCategories = {
   },
   'tdsToAttemptsRating': {
     id: 'tdsToAttemptsRating',
-    shorthand: 'TD to Att',
+    shorthand: 'Tds to Att',
     description: 'Touchdowns to Attempts Rating',
     type: 'decimal'
   },

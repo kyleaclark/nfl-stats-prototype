@@ -5,7 +5,7 @@ import {
 
 import { GameLogPassRatingScaleCategories } from '../../constants/GameLogCategories';
 
-export default class PassRatingRadarChart extends PureComponent {
+export default class GameLogPassRatingRadarChart extends PureComponent {
 
   _computeChartData(gameLog) {
     const fullScaleMark = 100;
@@ -32,7 +32,7 @@ export default class PassRatingRadarChart extends PureComponent {
     console.log('data : ', data);
 
     return (
-        <RadarChart outerRadius={125} width={500} height={500} data={data}>
+        <RadarChart outerRadius={150} width={450} height={400} data={data}>
           <PolarGrid />
           <PolarAngleAxis dataKey='category' />
           <PolarRadiusAxis angle={60} domain={[0, 100]} />
