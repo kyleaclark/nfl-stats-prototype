@@ -6,22 +6,17 @@ import {Players} from '../constants/players';
 import reducerHandler from '../utils/reducerHandler';
 
 const initialRecord = Record({
-  players: {}
+  players: null
 });
 const initialState = new initialRecord();
 
 function createPlayers(state, action) {
   const nextPlayers = {}
 
-  console.log('createPlayers reducer');
-  console.log('Players');
-
   Players.forEach((playerInfo, index) => {
-    const player = new Player(playerInfo.id, playerInfo.games);
+    const player = new Player(playerInfo.id, playerInfo.gameLogs);
     nextPlayers[[playerInfo.id]] = player
   });
-
-  console.log(nextPlayers);
 
   return state.withMutations((ctx) => {
     ctx.set('players', nextPlayers)

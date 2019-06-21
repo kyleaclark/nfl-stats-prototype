@@ -2,18 +2,20 @@ import PlayerSeason from './playerSeason';
 
 export default class Player {
 
-  constructor(playerId, playerGames) {
-    console.log(playerGames);
+  constructor(playerId, playerGameLogs) {
     this.id = playerId;
-    this.fullName = playerGames[0].fullname;
-    this.playerImageUrl = playerGames[0].playerimage;
-    this.playerSeason = new PlayerSeason(playerGames[0].seasonyear);
+    this.fullName = playerGameLogs[0].fullname;
+    this.playerImageUrl = playerGameLogs[0].playerimage;
+    this.playerSeason = new PlayerSeason(playerGameLogs[0].seasonyear);
+    this.computePlayerSeason(playerGameLogs);
   }
 
-  computePlayerSeason(games) {
-    games.forEach((gameInfo, index) => {
-      this.playerSeason.computeGameInfo(gameInfo);
+  computePlayerSeason(playerGameLogs) {
+    playerGameLogs.forEach((gameLogInfo, index) => {
+      this.playerSeason.computeGameInfo(gameLogInfo);
     });
+
+    this.playerSeason.computeSeasonStats();
   }
 
 }
