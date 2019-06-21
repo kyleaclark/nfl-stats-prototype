@@ -84,8 +84,6 @@ class App extends Component {
     const gameLog = selectedPlayer.playerSeason.gameLogs[gameLogWeekIndex];
     const weeks = selectedPlayer.playerSeason.seasonCategories.week;
 
-    console.log('gameLogWeekIndex : ', selectedPlayer, gameLogWeekIndex);
-
     return (
       <Card title='Passer Rating Breakdown by Game Log' type='inner' style={{ marginBottom: '40px' }}>
 

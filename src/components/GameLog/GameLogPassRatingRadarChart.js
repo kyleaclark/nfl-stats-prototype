@@ -29,8 +29,6 @@ export default class GameLogPassRatingRadarChart extends PureComponent {
     const data = this._computeChartData(this.props.gameLog);
     const playerName = this.props.playerName;
 
-    console.log('data : ', data);
-
     return (
         <RadarChart outerRadius={150} width={450} height={400} data={data}>
           <PolarGrid />
