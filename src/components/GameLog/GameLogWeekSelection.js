@@ -26,11 +26,9 @@ export default class GameLogCategorySelection extends Component {
   }
 
   render() {
-    const placeholder = this.props.defaultValue;
-
     return (
       <Select
-        defaultValue={placeholder}
+        value={this.props.value}
         size='large'
         style={{ width: '220px' }}
         onChange={(value) => this.props.onGameLogWeekSelection(value)}

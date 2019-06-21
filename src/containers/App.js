@@ -84,7 +84,7 @@ class App extends Component {
     const gameLog = selectedPlayer.playerSeason.gameLogs[gameLogWeekIndex];
     const weeks = selectedPlayer.playerSeason.seasonCategories.week;
 
-    console.log('gameLogWeekIndex : ', gameLogWeekIndex);
+    console.log('gameLogWeekIndex : ', selectedPlayer, gameLogWeekIndex);
 
     return (
       <Card title='Passer Rating Breakdown by Game Log' type='inner' style={{ marginBottom: '40px' }}>
@@ -92,7 +92,7 @@ class App extends Component {
         <Row gutter={8}>
           <Col xs={24} lg={8}>
             <GameLogWeekSelection
-              defaultValue={gameLogWeekIndex}
+              value={gameLogWeekIndex}
               weeks={weeks}
               onGameLogWeekSelection={this.onGameLogWeekSelection} />
 
@@ -157,13 +157,13 @@ class App extends Component {
         <Col xs={24}>
 
           <PlayerSelection
-            defaultValue={selectedPlayer.id}
+            value={selectedPlayer.id}
             players={this.props.players}
             onPlayerSelection={this._onPlayerSelection} />
 
           <GameLogCategorySelection
               onGameLogCategorySelection={this.onGameLogCategorySelection}
-              defaultValue={selectedGameLogCategory.id} />
+              value={selectedGameLogCategory.id} />
 
         </Col>
       </Row>

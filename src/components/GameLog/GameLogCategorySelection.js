@@ -30,13 +30,11 @@ export default class GameLogCategorySelection extends Component {
   }
 
   render() {
-    const placeholder = this.props.defaultValue || 'Select Game Log Stat';
-
     return (
       <Select
-        defaultValue={placeholder}
+        value={this.props.value}
         size='large'
-        style={{ width: '220px' }} 
+        style={{ width: '220px' }}
         onChange={(value) => this.props.onGameLogCategorySelection(value)}
       >
         {this._renderOptionsGroup(GameLogPassCategories, 'Passing Stats')}
