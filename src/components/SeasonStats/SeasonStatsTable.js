@@ -66,26 +66,6 @@ export default class GameLogTable extends Component {
     return column;
   }
 
-  // _generateColumns() {
-  //   const renderFnMap = {
-  //     'date': this._renderDateValue,
-  //     'decimal': this._renderDecimalValue,
-  //     'int': null,
-  //     'percentage': this._renderPercentageValue,
-  //     'text': null
-  //   };
-  //
-  //   return [{
-  //     this._generateColumn('category', 'Category', 'Stat Category', null),
-  //     this._generateColumn('sum', 'Total', 'Total Sum', null),
-  //     this._generateColumn('min', 'Minimum', 'Minimum Value', null),
-  //     this._generateColumn('max', 'Maximum', 'Maximum Value', null),
-  //     this._generateColumn('avg', 'Average', 'Average Value', this._renderDecimalValue),
-  //     this._generateColumn('med', 'Median', 'Median Value', null),
-  //     this._generateColumn('std', 'Standard Variation', 'Standard Deviation', null)
-  //   }]
-  // }
-
   _generateDefaultColumn(key, name, title, renderFn) {
     const column = {
       title: this._renderColumnName(name, title),
@@ -107,14 +87,11 @@ export default class GameLogTable extends Component {
       'percentage': this._renderPercentageValue
     };
 
-    let columns = [];
-    Object.values(gameLogCategories).forEach((category) => {
-      columns.push(this._generateDefaultColumn(
+    return Object.values(gameLogCategories).map((category) => {
+      return this._generateDefaultColumn(
         category.id, category.shorthand, category.description, renderFnMap[category.type]
-      ));
+      );
     });
-
-    return columns;
   }
 
   _generateColumns() {

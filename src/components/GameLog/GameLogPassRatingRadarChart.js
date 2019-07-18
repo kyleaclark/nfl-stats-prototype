@@ -9,14 +9,12 @@ export default class GameLogPassRatingRadarChart extends PureComponent {
 
   _computeChartData(gameLog) {
     const fullScaleMark = 100;
-    let data = [];
-
-    Object.values(GameLogPassRatingScaleCategories).forEach(gameLogCategory => {
-      data.push({
+    let data = Object.values(GameLogPassRatingScaleCategories).map(gameLogCategory => {
+      return {
         category: gameLogCategory.shorthand,
         scaleValue: gameLog[gameLogCategory.id],
         fullMark: fullScaleMark
-      })
+      };
     });
 
     const ratingIndex = data.length - 1;

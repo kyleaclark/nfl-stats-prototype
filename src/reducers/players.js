@@ -11,12 +11,10 @@ const initialRecord = Record({
 const initialState = new initialRecord();
 
 function createPlayers(state, action) {
-  const nextPlayers = {}
-
-  Players.forEach((playerInfo, index) => {
-    const player = new Player(playerInfo.id, playerInfo.gameLogs);
-    nextPlayers[[playerInfo.id]] = player
-  });
+  const nextPlayers = Players.reduce((playerObj, playerInfo) => {
+     playerObj[[playerInfo.id]] = new Player(playerInfo.id, playerInfo.gameLogs);
+     return playerObj;
+  }, {})
 
   return state.withMutations((ctx) => {
     ctx.set('players', nextPlayers)

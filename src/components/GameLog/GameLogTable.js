@@ -67,20 +67,17 @@ export default class GameLogTable extends Component {
       'text': null
     };
 
-    let columns = [];
-    Object.values(gameLogCategories).forEach((category) => {
+    return Object.values(gameLogCategories).map((category) => {
       if (category.type === 'avatar') {
-        columns.push(this._generateAvatarColumn(
+        return this._generateAvatarColumn(
           category.id, category.shorthand, category.description
-        ));
+        );
       } else {
-        columns.push(this._generateDefaultColumn(
+        return this._generateDefaultColumn(
           category.id, category.shorthand, category.description, renderFnMap[category.type]
-        ));
+        );
       }
     });
-
-    return columns;
   }
 
   _generateColumns() {
