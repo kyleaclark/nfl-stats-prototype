@@ -14,8 +14,7 @@ function createPlayers(state, action) {
   const nextPlayers = {}
 
   Players.forEach((playerInfo, index) => {
-    const player = new Player(playerInfo.id, playerInfo.gameLogs);
-    nextPlayers[[playerInfo.id]] = player
+    nextPlayers[[playerInfo.id]] = new Player(playerInfo.id, playerInfo.gameLogs);
   });
 
   return state.withMutations((ctx) => {

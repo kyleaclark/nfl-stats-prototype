@@ -6,19 +6,15 @@ import {
 export default class GameLogChart extends PureComponent {
 
   _computeChartData(playerSeason, gameLogCategoryId) {
-    let data = [];
-
-    playerSeason.gameLogs.forEach((gameLog, index) => {
+    return playerSeason.gameLogs.map((gameLog, index) => {
       let dataItem = {
         name: `Wk ${gameLog.week}`
       };
 
       dataItem[gameLogCategoryId] = gameLog[gameLogCategoryId];
 
-      data.push(dataItem);
+      return dataItem;
     });
-
-    return data
   }
 
   render() {

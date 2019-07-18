@@ -16,10 +16,8 @@ export default class GameLogCategorySelection extends Component {
   }
 
   _renderOptionsGroup(categories, label) {
-    let options = [];
-
-    Object.values(categories).forEach(category => {
-      options.push(this._renderOption(category.id, category.description));
+    const options = Object.values(categories).map(category => {
+      return this._renderOption(category.id, category.description);
     });
 
     return (

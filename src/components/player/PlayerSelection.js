@@ -15,10 +15,8 @@ export default class PlayerSelection extends Component {
   }
 
   _renderOptionsGroup(players, label) {
-    let options = [];
-
-    Object.values(players).forEach(player => {
-      options.push(this._renderOption(player.id, player.fullName, player.playerImageUrl));
+    const options = Object.values(players).map(player => {
+      return this._renderOption(player.id, player.fullName, player.playerImageUrl);
     });
 
     return (
